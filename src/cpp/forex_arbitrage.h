@@ -1,7 +1,6 @@
 #ifndef FOREX_ARBITRAGE_H
 #define FOREX_ARBITRAGE_H
 
-#include <cstddef>
 #include <cstdint>
 #include <string>
 #include <unordered_map>
