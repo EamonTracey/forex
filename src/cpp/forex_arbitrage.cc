@@ -4,8 +4,6 @@
 
 #include "forex_arbitrage.h"
 
-#include <iostream>
-
 ForexArbitrage::ForexArbitrage(std::vector<std::string> currencies) {
     n_currencies_ = static_cast<uint32_t>(currencies.size());
     n_nodes_ = n_currencies_ + 1;
