@@ -10,8 +10,8 @@ const std::vector<std::string> CURRENCIES = {"USD", "EUR", "JPY", "GBP", "CNH",
                                              "AUD", "CAD", "CHF", "HKD", "SGD"};
 
 bool parse_line(std::ifstream &csv, std::string &base_currency,
-                std::string &quote_currency, double &ask_price, double &bid_price,
-                unsigned long int &timestamp);
+                std::string &quote_currency, double &ask_price,
+                double &bid_price, unsigned long int &timestamp);
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -25,6 +25,9 @@ int main(int argc, char *argv[]) {
     std::getline(csv, _);
 
     ForexArbitrage forex_arbitrage(CURRENCIES);
+    const auto &id_to_currency = forex_arbitrage.id_to_currency();
+    struct arbitrage_opportunity arbitrage_opportunity;
+
     std::string base_currency;
     std::string quote_currency;
     double ask_price;
@@ -35,19 +38,25 @@ int main(int argc, char *argv[]) {
                       timestamp)) {
         if (timestamp != last_timestamp) {
             last_timestamp = timestamp;
-            forex_arbitrage.IsArbitragePossible();
+            if (forex_arbitrage.FindArbitrageOpportunity(
+                    arbitrage_opportunity)) {
+                std::cout << arbitrage_opportunity.profit;
+                for (auto &currency : arbitrage_opportunity.currencies)
+                    std::cout << " " << id_to_currency.at(currency);
+                std::cout << " " << timestamp << std::endl;
+                return 1;
+            }
         }
-
-        forex_arbitrage.Update(base_currency, quote_currency, ask_price);
+        forex_arbitrage.Update(base_currency, quote_currency, bid_price);
     }
-    forex_arbitrage.IsArbitragePossible();
+    forex_arbitrage.FindArbitrageOpportunity(arbitrage_opportunity);
 
     return 0;
 }
 
 bool parse_line(std::ifstream &csv, std::string &base_currency,
-                std::string &quote_currency, double &ask_price, double &bid_price,
-                unsigned long int &timestamp) {
+                std::string &quote_currency, double &ask_price,
+                double &bid_price, unsigned long int &timestamp) {
     std::string line;
     std::string field;
     std::vector<std::string> fields;
