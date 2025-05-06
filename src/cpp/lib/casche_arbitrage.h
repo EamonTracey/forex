@@ -21,11 +21,19 @@ class CascheArbitrage {
     ~CascheArbitrage();
 
     // Update the state to reflect a new exchange rate for a currency pair.
-    void Update(std::string pair, double exchange_rate);
+    void Update(std::string pair, double rate);
 
     // Determine if an arbitrage opportunity arises given a new exchange rate
-    // for a currency pair.
-    bool NewArbitrage(std::string pair, double exchange_rate);
+    // for a currency pair. This will always return false if the previous
+    // exchange rate is NAN.
+    bool NewArbitrage(std::string pair, double rate);
+
+    const std::unordered_map<std::string, uint32_t> &string_to_pair() const;
+    const std::vector<std::string> &pair_to_string() const;
+    const std::vector<std::vector<uint32_t>> &pair_to_cycles() const;
+    const std::vector<std::vector<uint32_t>> &cycle_to_pairs() const;
+    const std::vector<double> &pair_to_rate() const;
+    const std::vector<double> &cycle_to_profit() const;
 
   private:
     // The number of cycles to track.
@@ -33,8 +41,8 @@ class CascheArbitrage {
     // The number of pairs within tracked cycles.
     uint32_t n_pairs_;
 
-    std::unordered_map<std::string, uint32_t> pair_to_id_;
-    std::vector<std::string> id_to_pair_;
+    std::unordered_map<std::string, uint32_t> string_to_pair_;
+    std::vector<std::string> pair_to_string_;
 
     std::vector<std::vector<uint32_t>> pair_to_cycles_;
     std::vector<std::vector<uint32_t>> cycle_to_pairs_;

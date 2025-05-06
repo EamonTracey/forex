@@ -32,7 +32,7 @@ $(BUILD_OBJ_DIR)/%.o: $(SRC_LIB_DIR)/%.cc
 # Build the binaries.
 $(BUILD_BIN_DIR)/%: $(SRC_BIN_DIR)/%.cc $(BUILD_DIR)/lib$(LIB_NAME).a
 	@mkdir -p $(BUILD_BIN_DIR)
-	$(CC) $(CFLAGS) $< -o $@ -I$(SRC_LIB_DIR) -L$(BUILD_DIR) -l$(LIB_NAME)
+	$(CC) $(CFLAGS) $< -o $@ -I$(SRC_LIB_DIR) -L$(BUILD_DIR) -l$(LIB_NAME) -lfmt
 
 .PHONY: format
 format:
