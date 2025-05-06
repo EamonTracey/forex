@@ -60,7 +60,9 @@ void ForexArbitrage::Update(std::string currency1, std::string currency2,
     // finding a negative cycle in a directed, weighted graph.
     double weight = -log(exchange_rate);
 
-    std::cout << "c1=" << currency1 << " c2=" << currency2 << " weight=" << weight << " exchange_rate=" << exchange_rate << std::endl;
+    std::cout << "c1=" << currency1 << " c2=" << currency2
+              << " weight=" << weight << " exchange_rate=" << exchange_rate
+              << std::endl;
 
     graph_[currency1_id][currency2_id] = weight;
 }
@@ -197,7 +199,12 @@ bool ForexArbitrage::FindArbitrageOpportunity(
                 arbitrage_opportunity.profit =
                     exp(-arbitrage_opportunity.profit);
 
-                std::cout << graph_[arbitrage_opportunity.currencies.front()][arbitrage_opportunity.currencies.back()] << " " << graph_[arbitrage_opportunity.currencies.back()][arbitrage_opportunity.currencies.front()] << std::endl;
+                std::cout << graph_[arbitrage_opportunity.currencies.front()]
+                                   [arbitrage_opportunity.currencies.back()]
+                          << " "
+                          << graph_[arbitrage_opportunity.currencies.back()]
+                                   [arbitrage_opportunity.currencies.front()]
+                          << std::endl;
 
                 return true;
             }
